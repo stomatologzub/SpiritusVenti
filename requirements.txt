@@ -1,0 +1,4 @@
+Django>=5.2.6,<5.3
+python-dotenv>=1.1,<2
+whitenoise>=6.9,<7
+waitress>=3.0.2,<4

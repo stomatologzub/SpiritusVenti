@@ -1,0 +1,8 @@
+.venv/
+.env
+__pycache__/
+*.py[cod]
+staticfiles/
+tools/*.exe
+.hosting/
+public-url.txt
