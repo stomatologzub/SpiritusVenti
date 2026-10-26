@@ -35,8 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileMenu = document.getElementById('mobileMenu');
   const mobileBackdrop = document.getElementById('mobileBackdrop');
   const mobileLinks = document.querySelectorAll('[data-nav-mobile]');
+  const menuClose = document.getElementById('menuClose');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function closeMobileMenu() {
+    const wasOpen = burger.classList.contains('is-open');
+    mobileMenu.inert = true;
+    burger.setAttribute('aria-label', 'Otvoriť menu');
+    if (wasOpen) burger.focus();
     burger.classList.remove('is-open');
     burger.setAttribute('aria-expanded', 'false');
     mobileMenu.classList.remove('is-open');
@@ -44,9 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
   }
   function openMobileMenu() {
+    mobileMenu.inert = false;
+    burger.setAttribute('aria-label', 'Zavrieť menu');
     burger.classList.add('is-open');
     burger.setAttribute('aria-expanded', 'true');
     mobileMenu.classList.add('is-open');
+    menuClose.focus();
     mobileBackdrop.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
@@ -54,6 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
     burger.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
   });
   mobileBackdrop.addEventListener('click', closeMobileMenu);
+  menuClose.addEventListener('click', closeMobileMenu);
+  window.matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) closeMobileMenu(); });
+  mobileMenu.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const items = [...mobileMenu.querySelectorAll('a, button')];
+    if (e.shiftKey && document.activeElement === items[0]) { e.preventDefault(); items.at(-1).focus(); }
+    else if (!e.shiftKey && document.activeElement === items.at(-1)) { e.preventDefault(); items[0].focus(); }
+  });
   mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
 
   /* =========================================================
@@ -81,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const statNums = document.querySelectorAll('.hero__stat-num');
   function animateCount(el) {
     const target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    if (reducedMotion) { el.textContent = target; return; }
     const duration = 1400;
     const start = performance.now();
     function tick(now) {
@@ -106,15 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
      Gallery — placeholder tiles + lightbox
      ========================================================= */
   const galleryItems = [
-    { title: 'Montáž hlavného vzduchovodu', tone: 0, h: 300 },
-    { title: 'Inštalácia prívodnej jednotky', tone: 1, h: 380 },
-    { title: 'Montáž rozvodov na streche', tone: 2, h: 260 },
-    { title: 'Vyváženie systému', tone: 0, h: 340 },
-    { title: 'Montáž priemyselného ventilátora', tone: 1, h: 300 },
-    { title: 'Tepelná izolácia vzduchovodov', tone: 2, h: 380 },
-    { title: 'Inštalácia rekuperačnej jednotky', tone: 0, h: 260 },
-    { title: 'Servisná údržba', tone: 1, h: 320 },
-    { title: 'Kontrola a spustenie systemu', tone: 0, h: 300 },
+    { title: 'Strešná vzduchotechnika', tone: 0, h: 340 },
+    { title: 'Montáž vzduchotechniky', tone: 1, h: 340 },
+    { title: 'Servis a údržba', tone: 0, h: 340 },
+    { title: 'Kontrola a spustenie systému', tone: 1, h: 340 },
   ];
 
   const tones = [
@@ -125,13 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const assetsUrl = document.querySelector('script[data-assets-url]').dataset.assetsUrl;
   const galleryImages = [
-    'https://www.yushi.co.th/img_summernote_image/summernote-img-240603152516-921.webp',
-    'https://cdn.prod.website-files.com/68924d30cc1669b12c630069/68b58b736ac21db37b51c9e1_68ad4b265308cc7b9c00c4e4_DuctworkInstallation_1.webp',
     `${assetsUrl}gallery/rooftop-hvac.png`,
-    'https://assets.zyrosite.com/cdn-cgi/image/format%3Dauto%2Cw%3D768%2Ch%3D696%2Cfit%3Dcrop/pUmzx6QVgb4TTkrW/large-vecteezy_worker-installing-ventilation-ductwork-in-industrial-setting_66551866_large-TcTX5aqsKApgSRBY.jpg',
     `${assetsUrl}gallery/commercial-installation.jpg`,
-    `${assetsUrl}gallery/commercial-installation.jpg`,
-    'https://images.ctfassets.net/4y40wxcxzkmz/16n4b47k23W7XPpZ9RkAWw/4d1d732f130ebf0b743be6a7262bafdf/lueftungszentrale_gebaeudetechnik_shutterstock_1761954635_orig_RGB_komp._4-3.jpg?bg=rgb%3Ae8edf2&fl=progressive&fm=jpg&h=2108&q=50&w=1920',
     `${assetsUrl}gallery/service-maintenance.webp`,
     `${assetsUrl}gallery/system-commissioning.jpg`,
   ];
@@ -162,6 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
   galleryItems.forEach((item, i) => {
     const fig = document.createElement('figure');
     fig.className = 'gallery__item';
+    fig.tabIndex = 0;
+    fig.setAttribute('role', 'button');
+    fig.setAttribute('aria-label', 'Zobraziť fotografiu: ' + item.title);
     fig.setAttribute('data-caption', item.title);
     fig.setAttribute('data-tone', item.tone);
     fig.innerHTML = `
@@ -178,14 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxCaption = document.getElementById('lightboxCaption');
   const lightboxClose = document.getElementById('lightboxClose');
 
+  let previousFocus;
   function openLightbox(tone, caption, seed) {
+    previousFocus = document.activeElement;
+    lightbox.inert = false;
     lightboxFrame.innerHTML = `<img src="${galleryImages[seed]}" alt="${caption}">`;
     lightboxCaption.textContent = caption;
     lightbox.classList.add('is-open');
+    lightboxClose.focus();
     document.body.style.overflow = 'hidden';
   }
   function closeLightbox() {
+    const wasOpen = lightbox.classList.contains('is-open');
     lightbox.classList.remove('is-open');
+    lightbox.inert = true;
+    if (wasOpen && previousFocus) previousFocus.focus();
     document.body.style.overflow = '';
   }
 
@@ -196,6 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const caption = item.getAttribute('data-caption');
     openLightbox(tone, caption, Array.from(galleryGrid.children).indexOf(item));
   });
+  galleryGrid.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { const item = e.target.closest('.gallery__item'); if(item) { e.preventDefault(); item.click(); } }
+  });
+  lightbox.addEventListener('keydown', e => { if (e.key === 'Tab') { e.preventDefault(); lightboxClose.focus(); } });
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', (e) => {
@@ -203,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* =========================================================
-     Contact form — frontend-only fake submit
+     Contact form — Django endpoint
      ========================================================= */
   const form = document.getElementById('contactForm');
   const toast = document.getElementById('toast');
@@ -257,6 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  const contactDock = document.querySelector('.mobile-contact');
+  new IntersectionObserver(entries => { contactDock.classList.toggle('is-hidden', entries[0].isIntersecting); }, {threshold: 0}).observe(document.getElementById('contact'));
+
   /* =========================================================
      Back to top
      ========================================================= */
@@ -265,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toTop.classList.toggle('is-visible', window.scrollY > 600);
   }, { passive: true });
   toTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
   });
 
   /* =========================================================
@@ -280,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const navH = document.getElementById('nav').offsetHeight;
       const top = target.getBoundingClientRect().top + window.scrollY - navH + 1;
-      window.scrollTo({ top, behavior: 'smooth' });
+      window.scrollTo({ top, behavior: reducedMotion ? 'auto' : 'smooth' });
     });
   });
 

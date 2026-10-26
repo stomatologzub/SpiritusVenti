@@ -13,8 +13,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'premium.css' %}">
 </head>
 <body>
+  <a class="skip-link" href="#main">Prejsť na obsah</a>
 
   <!-- ================= NAV ================= -->
   <header class="nav" id="nav">
@@ -40,14 +42,16 @@
       <div class="nav__actions">
         <a href="tel:+421900123456" class="btn btn--ghost nav__phone">+421 900 123 456</a>
         <a href="#contact" class="btn btn--primary nav__cta">Kontaktovať nás</a>
-        <button class="nav__burger" id="burger" aria-label="Otvoriť menu" aria-expanded="false">
+        <button class="nav__burger" id="burger" aria-controls="mobileMenu" aria-label="Otvoriť menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
   </header>
 
-  <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu" id="mobileMenu" inert aria-label="Mobilná navigácia">
+    <button class="mobile-menu__close" id="menuClose" aria-label="Zavrieť menu">×</button>
+    <span class="eyebrow">SPIRITUSVENTI / MENU</span>
     <a href="#home" data-nav-mobile>Úvod</a>
     <a href="#about" data-nav-mobile>O nás</a>
     <a href="#services" data-nav-mobile>Služby</a>
@@ -57,7 +61,7 @@
   </div>
   <div class="mobile-menu__backdrop" id="mobileBackdrop"></div>
 
-  <main>
+  <main id="main">
 
     <!-- ================= HERO ================= -->
     <section class="hero" id="home">
@@ -68,17 +72,14 @@
 
       <div class="hero__inner">
         <div class="hero__copy">
+          <p class="eyebrow">VZDUCHOTECHNIKA S CITOM PRE DETAIL</p>
           <h1 class="hero__title">
-            <span class="reveal-line">Vzduch, ktorý sa</span>
-            <span class="reveal-line">dobre dýcha</span>
+            <span class="reveal-line">Dobrý priestor.</span>
+            <span class="reveal-line">Začína vzduchom.</span>
           </h1>
-          <p class="hero__lead reveal-fade">
-            SpiritusVenti navrhuje a montuje vzduchotechnické systémy pre domy, kancelárie
-            a výrobné priestory — s presným výpočtom výmeny vzduchu, odbornou montážou a servisom,
-            na ktorý sa môžete spoľahnúť celé roky.
-          </p>
+          <p class="hero__lead reveal-fade">Návrh, montáž a servis vetrania pre váš domov aj podnikanie. Premyslený systém. Precízne prevedenie. Komfort každý deň.</p>
           <div class="hero__actions reveal-fade">
-            <a href="#contact" class="btn btn--primary btn--lg">Kontaktovať nás</a>
+            <a href="#contact" class="btn btn--primary btn--lg">Prebrať môj projekt <span aria-hidden="true">↗</span></a>
             <a href="#services" class="btn btn--outline btn--lg">Naše služby</a>
           </div>
 
@@ -100,10 +101,11 @@
 
         <div class="hero__visual">
           <div class="airflow-panel">
+            <div class="visual-heading"><span>01 / TECHNOLÓGIA KOMFORTU</span><strong>Neviditeľný systém.<br>Citeľný rozdiel.</strong></div>
             <svg class="airflow-svg" viewBox="0 0 420 460" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <marker id="flowArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M0 0L10 5L0 10V0Z" fill="#004D36"/>
+                  <path d="M0 0L10 5L0 10V0Z" fill="currentColor"/>
                 </marker>
               </defs>
               <path class="airflow-guide" d="M54 138H366M54 322H366"/>
@@ -129,7 +131,7 @@
               <span class="dot"></span> Výmena vzduchu vypočítaná
             </div>
             <div class="airflow-chip airflow-chip--2">
-              Montáž&nbsp;— 1–3 dni
+              Návrh · montáž · servis
             </div>
           </div>
         </div>
@@ -140,7 +142,7 @@
     <section class="about" id="about">
       <div class="section-inner about__grid">
         <div class="about__text reveal-up">
-          <h2 class="section-title">Technický prístup ku každému projektu</h2>
+          <p class="eyebrow">01 / O SPIRITUSVENTI</p><h2 class="section-title">Technický prístup ku každému projektu</h2>
           <p class="section-lead">
             Zaoberáme sa návrhom, montážou a servisom vzduchotechnických systémov —
             od bytov až po výrobné haly. Pred inštaláciou vypočítame výmenu vzduchu, vyberieme zariadenie
@@ -177,7 +179,7 @@
     <section class="services" id="services">
       <div class="section-inner">
         <div class="section-head reveal-up">
-          <h2 class="section-title">Čo robíme</h2>
+          <p class="eyebrow">02 / NAŠE SLUŽBY</p><h2 class="section-title">Riešenie pre váš priestor</h2>
           <p class="section-lead">Kompletné služby — od návrhu až po servis hotového systému.</p>
         </div>
 
@@ -247,8 +249,8 @@
     <section class="gallery" id="gallery">
       <div class="section-inner">
         <div class="section-head reveal-up">
-          <h2 class="section-title">Ako pracujeme</h2>
-          <p class="section-lead">Zábery z reálnych projektov — od montáže rozvodov až po finálne spustenie systému.</p>
+          <p class="eyebrow">03 / DETAILY REALIZÁCIE</p><h2 class="section-title">Technika v praxi</h2>
+          <p class="section-lead">Pozrite si technické riešenia — od rozvodov vzduchu až po servis zariadení.</p>
         </div>
 
         <div class="gallery__grid" id="galleryGrid">
@@ -257,12 +259,13 @@
       </div>
     </section>
 
+    <section class="process" aria-labelledby="processTitle"><div class="section-inner"><div class="section-head"><p class="eyebrow">04 / OD ZADANIA K VÝSLEDKU</p><h2 class="section-title" id="processTitle">Jasný postup.<br>Od prvého rozhovoru.</h2></div><div class="process-grid"><article><span>01</span><h3>Spoznáme váš priestor</h3><p>Prejdeme si vaše požiadavky, účel priestoru a možnosti realizácie.</p></article><article><span>02</span><h3>Navrhneme riešenie</h3><p>Vyberieme vhodný systém a dohodneme rozsah prác aj ďalší postup.</p></article><article><span>03</span><h3>Montáž a starostlivosť</h3><p>Zabezpečíme inštaláciu, odovzdanie a následný servis vzduchotechniky.</p></article></div></div></section>
     <!-- ================= CONTACT ================= -->
     <section class="contact" id="contact">
       <div class="section-inner contact__grid">
 
         <div class="contact__info reveal-up">
-          <h2 class="section-title">Preberieme váš projekt</h2>
+          <p class="eyebrow">05 / ZAČNIME ROZHOVOROM</p><h2 class="section-title">Preberieme váš projekt</h2>
           <p class="section-lead">Nechajte nám kontakt — zavoláme vám počas pracovného dňa a navrhneme termín návštevy technika.</p>
 
           <ul class="contact__list">
@@ -287,17 +290,18 @@
 
         <form class="contact__form reveal-up" id="contactForm" action="{% url 'contact' %}" method="post">
           {% csrf_token %}
+          <div class="form-heading"><h3>Povedzte nám o svojom projekte</h3><p>Stačí pár detailov. Ozveme sa vám.</p></div>
           <div class="field">
             <label for="fName">Meno</label>
-            <input type="text" id="fName" name="name" placeholder="Ako vás môžeme oslovovať" required>
+            <input type="text" id="fName" name="name" autocomplete="name" placeholder="Ako vás môžeme oslovovať" required>
           </div>
           <div class="field">
             <label for="fPhone">Telefón</label>
-            <input type="tel" id="fPhone" name="phone" placeholder="+421 9__ ___ ___" required>
+            <input type="tel" id="fPhone" name="phone" autocomplete="tel" placeholder="+421 9__ ___ ___" required>
           </div>
           <div class="field">
             <label for="fEmail">Email</label>
-            <input type="email" id="fEmail" name="email" placeholder="name@mail.com">
+            <input type="email" id="fEmail" name="email" autocomplete="email" placeholder="name@mail.com">
           </div>
           <div class="field">
             <label for="fMsg">Správa</label>
@@ -343,14 +347,6 @@
               <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></svg>
               <span>@spiritusventi</span>
             </a>
-            <a href="#" target="_blank" rel="noopener" class="social-btn">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M14 9V6.5A1.5 1.5 0 0 1 15.5 5H17V2h-2.5A4.5 4.5 0 0 0 10 6.5V9H7v3h3v10h4V12h3.2l.8-3H14Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-              <span>Facebook</span>
-            </a>
-            <a href="#" target="_blank" rel="noopener" class="social-btn">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M21 5.5c-.7.3-1.5.6-2.3.7a4 4 0 0 0 1.8-2.2 8 8 0 0 1-2.5 1 4 4 0 0 0-6.9 3.6A11.4 11.4 0 0 1 3.1 4.3a4 4 0 0 0 1.3 5.4 4 4 0 0 1-1.9-.5v.1a4 4 0 0 0 3.3 4 4 4 0 0 1-1.9.1 4 4 0 0 0 3.8 2.8A8.1 8.1 0 0 1 2 17.9a11.4 11.4 0 0 0 6.2 1.8c7.4 0 11.5-6.2 11.5-11.5v-.5c.8-.6 1.5-1.3 2-2.1-.7.3-1.5.5-2.3.6.8-.5 1.4-1.3 1.7-2.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-              <span>Twitter / X</span>
-            </a>
           </div>
       </div>
       </div>
@@ -366,12 +362,13 @@
   </button>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxCaption" inert>
     <button class="lightbox__close" id="lightboxClose" aria-label="Zavrieť">&times;</button>
     <div class="lightbox__frame" id="lightboxFrame"></div>
     <p class="lightbox__caption" id="lightboxCaption"></p>
   </div>
 
+  <div class="mobile-contact"><span>Váš priestor.<br><strong>Naše riešenie.</strong></span><a class="btn btn--primary" href="#contact">Prebrať projekt <span aria-hidden="true">↗</span></a></div>
   <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
