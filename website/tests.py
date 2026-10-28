@@ -4,7 +4,7 @@ from django.core import mail
 from django.contrib.staticfiles import finders
 from django.test import Client, SimpleTestCase, override_settings
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend', EMAIL_HOST='smtp.example.com', DEFAULT_FROM_EMAIL='site@example.com', CONTACT_EMAIL='owner@example.com')
+@override_settings(STORAGES={'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'}}, EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend', EMAIL_HOST='smtp.example.com', DEFAULT_FROM_EMAIL='site@example.com', CONTACT_EMAIL='owner@example.com')
 class WebsiteTests(SimpleTestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
@@ -20,8 +20,24 @@ class WebsiteTests(SimpleTestCase):
         self.assertContains(response, '/static/style.css')
         self.assertContains(response, '/static/script.js')
         self.assertContains(response, 'action="/api/contact/"')
+        self.assertContains(response, '/static/premium.css')
         for name in ['style.css', 'script.js', 'gallery/rooftop-hvac.png', 'gallery/commercial-installation.jpg', 'gallery/service-maintenance.webp', 'gallery/system-commissioning.jpg']:
             self.assertIsNotNone(finders.find(name))
+
+    def test_unverified_details_are_not_published(self):
+        response = self.client.get('/')
+        for value in ['+421 900 123 456', 'info@spiritusventi.sk', 'Priemyselná 10', '240+', '99%', '24 h', '72 h', 'data-count', 'hero__notice']:
+            self.assertNotContains(response, value)
+        self.assertContains(response, 'Ilustračné fotografie.')
+
+    @override_settings(EMAIL_HOST='')
+    def test_form_is_disabled_without_mail_configuration(self):
+        response = self.client.get('/')
+        self.assertContains(response, 'data-ready="false"')
+        self.assertContains(response, '<fieldset disabled')
+        self.assertContains(response, 'Formulár zatiaľ neprijíma správy.')
+        self.assertEqual(self.post().status_code, 503)
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_contact_sends_email(self):
         self.assertEqual(self.post().status_code, 200)

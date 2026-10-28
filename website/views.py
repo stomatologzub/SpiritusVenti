@@ -6,12 +6,18 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_GET, require_POST
 from .forms import ContactForm
+from .content import CONTACT_DETAILS, GALLERY, SERVICES
 
 logger = logging.getLogger(__name__)
 
 @require_GET
 def home(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {
+        'contacts': {key: item for key, item in CONTACT_DETAILS.items() if item['verified']},
+        'gallery': GALLERY,
+        'services': SERVICES,
+        'contact_ready': bool(settings.EMAIL_HOST and settings.DEFAULT_FROM_EMAIL and settings.CONTACT_EMAIL),
+    })
 
 def csrf_failure(request, reason=''):
     return JsonResponse({'ok': False, 'message': 'Obnovte stránku a skúste to znova.'}, status=403)

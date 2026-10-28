@@ -1,312 +1,157 @@
-document.addEventListener('DOMContentLoaded', () => {
-
-  /* =========================================================
-     Footer year
-     ========================================================= */
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  /* =========================================================
-     Sticky nav background + active link on scroll
-     ========================================================= */
+﻿document.addEventListener('DOMContentLoaded', () => {
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const nav = document.getElementById('nav');
-  const sections = document.querySelectorAll('main section[id]');
-  const navLinks = document.querySelectorAll('[data-nav]');
-
-  function onScrollNav() {
-    nav.classList.toggle('is-scrolled', window.scrollY > 24);
-
-    let current = sections[0] ? sections[0].id : '';
-    const offset = 140;
-    sections.forEach(sec => {
-      if (window.scrollY + offset >= sec.offsetTop) current = sec.id;
-    });
-    navLinks.forEach(link => {
-      link.classList.toggle('is-active', link.getAttribute('href') === `#${current}`);
-    });
-  }
-  document.addEventListener('scroll', onScrollNav, { passive: true });
-  onScrollNav();
-
-  /* =========================================================
-     Mobile menu
-     ========================================================= */
   const burger = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const mobileBackdrop = document.getElementById('mobileBackdrop');
-  const mobileLinks = document.querySelectorAll('[data-nav-mobile]');
-  const menuClose = document.getElementById('menuClose');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const menu = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('mobileBackdrop');
+  const close = document.getElementById('menuClose');
+  const background = [nav, document.getElementById('main'), document.querySelector('.footer')];
 
-  function closeMobileMenu() {
-    const wasOpen = burger.classList.contains('is-open');
-    mobileMenu.inert = true;
-    burger.setAttribute('aria-label', 'Otvoriť menu');
-    if (wasOpen) burger.focus();
-    burger.classList.remove('is-open');
+  function closeMenu(restoreFocus = true) {
+    const wasOpen = menu.classList.contains('is-open');
+    background.forEach(element => { element.inert = false; });
+    menu.inert = true;
+    menu.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
     burger.setAttribute('aria-expanded', 'false');
-    mobileMenu.classList.remove('is-open');
-    mobileBackdrop.classList.remove('is-open');
-    document.body.style.overflow = '';
+    burger.setAttribute('aria-label', 'Otvoriť menu');
+    document.body.classList.remove('has-modal');
+    if (wasOpen && restoreFocus) burger.focus();
   }
-  function openMobileMenu() {
-    mobileMenu.inert = false;
-    burger.setAttribute('aria-label', 'Zavrieť menu');
-    burger.classList.add('is-open');
+  function openMenu() {
+    menu.inert = false;
+    menu.classList.add('is-open');
+    backdrop.classList.add('is-open');
     burger.setAttribute('aria-expanded', 'true');
-    mobileMenu.classList.add('is-open');
-    menuClose.focus();
-    mobileBackdrop.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
+    burger.setAttribute('aria-label', 'Zavrieť menu');
+    document.body.classList.add('has-modal');
+    close.focus();
+    background.forEach(element => { element.inert = true; });
   }
-  burger.addEventListener('click', () => {
-    burger.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
+  burger.addEventListener('click', openMenu);
+  close.addEventListener('click', () => closeMenu());
+  backdrop.addEventListener('click', () => closeMenu());
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+    closeMenu(false);
+    const target = document.querySelector(link.getAttribute('href'));
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+  }));
+  menu.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { closeMenu(); return; }
+    if (event.key !== 'Tab') return;
+    const items = [...menu.querySelectorAll('a, button')];
+    const first = items[0], last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
-  mobileBackdrop.addEventListener('click', closeMobileMenu);
-  menuClose.addEventListener('click', closeMobileMenu);
-  window.matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) closeMobileMenu(); });
-  mobileMenu.addEventListener('keydown', e => {
-    if (e.key !== 'Tab') return;
-    const items = [...mobileMenu.querySelectorAll('a, button')];
-    if (e.shiftKey && document.activeElement === items[0]) { e.preventDefault(); items.at(-1).focus(); }
-    else if (!e.shiftKey && document.activeElement === items.at(-1)) { e.preventDefault(); items[0].focus(); }
+  window.matchMedia('(min-width: 901px)').addEventListener('change', event => {
+    if (event.matches) closeMenu(false);
   });
-  mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
 
-  /* =========================================================
-     Scroll reveal (IntersectionObserver)
-     ========================================================= */
-  const revealEls = document.querySelectorAll('.reveal-up, .reveal-fade');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
+  const sections = [...document.querySelectorAll('main section[id]')];
+  const navLinks = [...document.querySelectorAll('[data-nav]')];
+  let scrollQueued = false;
+  function updateNavigation() {
+    nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    let current = 'home';
+    const offset = nav.offsetHeight + 40;
+    sections.forEach(section => { if (section.getBoundingClientRect().top <= offset) current = section.id; });
+    navLinks.forEach(link => {
+      if (link.hash === `#${current}`) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    scrollQueued = false;
+  }
+  document.addEventListener('scroll', () => {
+    if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(updateNavigation); }
+  }, { passive: true });
+  updateNavigation();
+
+  if ('IntersectionObserver' in window && !motion.matches) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('is-pending');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.reveal').forEach(element => {
+      if (element.getBoundingClientRect().top > window.innerHeight) {
+        element.classList.add('is-pending');
+        observer.observe(element);
       }
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-  revealEls.forEach(el => revealObserver.observe(el));
-
-  // stagger index for service cards
-  document.querySelectorAll('.service-card').forEach((card, i) => {
-    card.style.setProperty('--i', i);
-  });
-
-  /* =========================================================
-     Animated hero stat counters
-     ========================================================= */
-  const statNums = document.querySelectorAll('.hero__stat-num');
-  function animateCount(el) {
-    const target = parseInt(el.getAttribute('data-count'), 10) || 0;
-    if (reducedMotion) { el.textContent = target; return; }
-    const duration = 1400;
-    const start = performance.now();
-    function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target);
-      if (progress < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        statNums.forEach(animateCount);
-        statsObserver.disconnect();
+    motion.addEventListener('change', event => {
+      if (event.matches) {
+        document.querySelectorAll('.is-pending').forEach(element => element.classList.remove('is-pending'));
+        observer.disconnect();
       }
     });
-  }, { threshold: 0.4 });
-  const statsRow = document.querySelector('.hero__stats');
-  if (statsRow) statsObserver.observe(statsRow);
-
-  /* =========================================================
-     Gallery — placeholder tiles + lightbox
-     ========================================================= */
-  const galleryItems = [
-    { title: 'Strešná vzduchotechnika', tone: 0, h: 340 },
-    { title: 'Montáž vzduchotechniky', tone: 1, h: 340 },
-    { title: 'Servis a údržba', tone: 0, h: 340 },
-    { title: 'Kontrola a spustenie systému', tone: 1, h: 340 },
-  ];
-
-  const tones = [
-    { a: '#004D36', b: '#D9EDFF' },
-    { a: '#D9EDFF', b: '#004D36' },
-    { a: '#004D36', b: '#D9EDFF' },
-  ];
-
-  const assetsUrl = document.querySelector('script[data-assets-url]').dataset.assetsUrl;
-  const galleryImages = [
-    `${assetsUrl}gallery/rooftop-hvac.png`,
-    `${assetsUrl}gallery/commercial-installation.jpg`,
-    `${assetsUrl}gallery/service-maintenance.webp`,
-    `${assetsUrl}gallery/system-commissioning.jpg`,
-  ];
-
-  function placeholderSVG(tone, seed) {
-    const c = tones[tone];
-    const lines = Array.from({ length: 6 }).map((_, i) =>
-      `<line x1="${-20 + i * 40}" y1="0" x2="${-60 + i * 40}" y2="200" stroke="rgba(217,237,255,0.18)" stroke-width="10"/>`
-    ).join('');
-    return `
-      <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g${seed}" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="${c.a}"/>
-            <stop offset="100%" stop-color="${c.b}"/>
-          </linearGradient>
-        </defs>
-        <rect width="300" height="200" fill="url(#g${seed})"/>
-        ${lines}
-        <circle cx="230" cy="50" r="34" fill="none" stroke="rgba(217,237,255,0.55)" stroke-width="3"/>
-        <circle cx="230" cy="50" r="16" fill="none" stroke="rgba(217,237,255,0.8)" stroke-width="3"/>
-      </svg>`;
   }
-
-  const galleryGrid = document.getElementById('galleryGrid');
-  const frag = document.createDocumentFragment();
-
-  galleryItems.forEach((item, i) => {
-    const fig = document.createElement('figure');
-    fig.className = 'gallery__item';
-    fig.tabIndex = 0;
-    fig.setAttribute('role', 'button');
-    fig.setAttribute('aria-label', 'Zobraziť fotografiu: ' + item.title);
-    fig.setAttribute('data-caption', item.title);
-    fig.setAttribute('data-tone', item.tone);
-    fig.innerHTML = `
-      <div class="gallery__tile" style="height:${item.h}px">
-        <img src="${galleryImages[i]}" alt="${item.title}" loading="lazy">
-        <figcaption class="gallery__caption">${item.title}</figcaption>
-      </div>`;
-    frag.appendChild(fig);
-  });
-  galleryGrid.appendChild(frag);
 
   const lightbox = document.getElementById('lightbox');
-  const lightboxFrame = document.getElementById('lightboxFrame');
-  const lightboxCaption = document.getElementById('lightboxCaption');
-  const lightboxClose = document.getElementById('lightboxClose');
-
-  let previousFocus;
-  function openLightbox(tone, caption, seed) {
-    previousFocus = document.activeElement;
-    lightbox.inert = false;
-    lightboxFrame.innerHTML = `<img src="${galleryImages[seed]}" alt="${caption}">`;
-    lightboxCaption.textContent = caption;
-    lightbox.classList.add('is-open');
-    lightboxClose.focus();
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    const wasOpen = lightbox.classList.contains('is-open');
-    lightbox.classList.remove('is-open');
-    lightbox.inert = true;
-    if (wasOpen && previousFocus) previousFocus.focus();
-    document.body.style.overflow = '';
-  }
-
-  galleryGrid.addEventListener('click', (e) => {
-    const item = e.target.closest('.gallery__item');
-    if (!item) return;
-    const tone = item.getAttribute('data-tone');
-    const caption = item.getAttribute('data-caption');
-    openLightbox(tone, caption, Array.from(galleryGrid.children).indexOf(item));
-  });
-  galleryGrid.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { const item = e.target.closest('.gallery__item'); if(item) { e.preventDefault(); item.click(); } }
-  });
-  lightbox.addEventListener('keydown', e => { if (e.key === 'Tab') { e.preventDefault(); lightboxClose.focus(); } });
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { closeLightbox(); closeMobileMenu(); }
+  const frame = document.getElementById('lightboxFrame');
+  document.querySelectorAll('.gallery__open').forEach(button => button.addEventListener('click', () => {
+    const image = new Image();
+    image.src = button.dataset.image;
+    image.alt = button.querySelector('img').alt;
+    frame.replaceChildren(image);
+    document.getElementById('lightboxCaption').textContent = button.dataset.caption;
+    lightbox.showModal();
+    document.body.classList.add('has-modal');
+  }));
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.close());
+  lightbox.addEventListener('close', () => document.body.classList.remove('has-modal'));
+  lightbox.addEventListener('click', event => {
+    if (event.target !== lightbox) return;
+    const rect = lightbox.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) lightbox.close();
   });
 
-  /* =========================================================
-     Contact form — Django endpoint
-     ========================================================= */
   const form = document.getElementById('contactForm');
-  const toast = document.getElementById('toast');
-  let toastTimer;
-
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add('is-visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 3600);
+  const status = document.getElementById('formStatus');
+  function report(message, state = 'error') {
+    status.textContent = message;
+    status.dataset.state = state;
   }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = form.elements.namedItem('name').value.trim();
-    const phone = form.elements.namedItem('phone').value.trim();
-
-    if (!name || !phone) {
-      showToast('Vyplňte, prosím, meno a telefónne číslo.');
-      return;
-    }
-
-    const submitBtn = form.querySelector('.field__submit .btn-label');
-    const button = form.querySelector('.field__submit');
-    if (button.disabled) return;
-    const originalLabel = submitBtn.textContent;
-    submitBtn.textContent = 'Odosielanie…';
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (form.dataset.ready !== 'true') { report('Formulár zatiaľ neprijíma správy. Odosielanie pripravujeme.'); return; }
+    const button = form.querySelector('button[type="submit"]');
+    if (button.disabled || !form.reportValidity()) return;
+    form.querySelectorAll('[aria-invalid]').forEach(field => field.removeAttribute('aria-invalid'));
     button.disabled = true;
     form.setAttribute('aria-busy', 'true');
+    const label = button.querySelector('.btn-label');
+    label.textContent = 'Odosielanie…';
+    report('Správa sa odosiela…', 'pending');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
     try {
       const response = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        credentials: 'same-origin',
-        headers: { 'Accept': 'application/json' },
+        method: 'POST', body: new FormData(form), credentials: 'same-origin',
+        headers: { Accept: 'application/json' }, signal: controller.signal,
       });
       const result = await response.json();
-      if (!response.ok || !result.ok) {
-        const errors = Object.values(result.errors || {}).flat().map(error => error.message);
-        showToast(errors.join(' ') || result.message || 'Správu sa nepodarilo odoslať.');
+      if (!response.ok || result.ok !== true) {
+        const errors = Object.entries(result.errors || {});
+        errors.forEach(([name]) => form.elements.namedItem(name)?.setAttribute('aria-invalid', 'true'));
+        report(errors.flatMap(([, values]) => values.map(error => error.message)).join(' ') || result.message || 'Správu sa nepodarilo odoslať. Skúste to neskôr.');
+        form.querySelector('[aria-invalid="true"]')?.focus();
         return;
       }
-      showToast(result.message);
+      report(result.message, 'success');
       form.reset();
-    } catch (error) {
-      showToast('Chyba pripojenia. Skúste to znova alebo nám zavolajte.');
+    } catch {
+      report('Odoslanie sa nepodarilo potvrdiť. Skontrolujte pripojenie a skúste to neskôr.');
     } finally {
-      submitBtn.textContent = originalLabel;
+      clearTimeout(timeout);
       button.disabled = false;
+      label.textContent = 'Odoslať požiadavku';
       form.removeAttribute('aria-busy');
     }
   });
-
-  const contactDock = document.querySelector('.mobile-contact');
-  new IntersectionObserver(entries => { contactDock.classList.toggle('is-hidden', entries[0].isIntersecting); }, {threshold: 0}).observe(document.getElementById('contact'));
-
-  /* =========================================================
-     Back to top
-     ========================================================= */
-  const toTop = document.getElementById('toTop');
-  document.addEventListener('scroll', () => {
-    toTop.classList.toggle('is-visible', window.scrollY > 600);
-  }, { passive: true });
-  toTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
-  });
-
-  /* =========================================================
-     Smooth scroll for in-page anchor links (accounts for sticky nav)
-     ========================================================= */
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const id = link.getAttribute('href');
-      if (id.length < 2) return;
-      const target = document.querySelector(id);
-      if (!target) return;
-      e.preventDefault();
-      const navH = document.getElementById('nav').offsetHeight;
-      const top = target.getBoundingClientRect().top + window.scrollY - navH + 1;
-      window.scrollTo({ top, behavior: reducedMotion ? 'auto' : 'smooth' });
-    });
-  });
-
 });

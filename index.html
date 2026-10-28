@@ -4,390 +4,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpiritusVenti — vetranie a montáž vzduchotechnických systémov</title>
-  <meta name="description" content="SpiritusVenti — profesionálna montáž vetrania, vzduchovodov, priemyselných a domácich vzduchotechnických systémov. Technická kvalita, čistý vzduch a spoľahlivý servis.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23004D36'/%3E%3C/svg%3E">
-
+  <title>SpiritusVenti — Priestor pre čerstvý vzduch</title>
+  <meta name="description" content="Návrh, montáž a servis vzduchotechniky. Vetranie pre váš domov aj pracovný priestor so SpiritusVenti.">
+  <meta name="theme-color" content="#173d31">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23173d31'/%3E%3Cpath d='M7 17c7 0 7-7 13-7s6 13 13 13M7 24c7 0 7 7 13 7s6-13 13-13' fill='none' stroke='%23e4ebd6' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="{% static 'premium.css' %}">
+  <script src="{% static 'script.js' %}" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Prejsť na obsah</a>
-
-  <!-- ================= NAV ================= -->
   <header class="nav" id="nav">
-    <div class="nav__inner">
-      <a href="#home" class="nav__brand">
-        <span class="nav__mark" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 16C10 16 10 8 16 8C22 8 22 20 28 20C34 20 34 12 36 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-            <path d="M4 24C10 24 10 32 16 32C22 32 22 20 28 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0.55"/>
-          </svg>
-        </span>
-        <span class="nav__word">Spiritus<em>Venti</em></span>
+    <div class="container nav__inner">
+      <a href="#home" class="brand" aria-label="SpiritusVenti — úvod">
+        <svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M4 16c6 0 6-8 12-8s6 12 12 12 6-8 8-8M4 24c6 0 6 8 12 8s6-12 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Spiritus<strong>Venti</strong><span class="brand__period">.</span></span>
       </a>
-
-      <nav class="nav__links" id="navLinks">
-        <a href="#home" class="nav__link is-active" data-nav>Úvod</a>
-        <a href="#about" class="nav__link" data-nav>O nás</a>
-        <a href="#services" class="nav__link" data-nav>Služby</a>
-        <a href="#gallery" class="nav__link" data-nav>Galéria</a>
-        <a href="#contact" class="nav__link" data-nav>Kontakt</a>
-      </nav>
-
-      <div class="nav__actions">
-        <a href="tel:+421900123456" class="btn btn--ghost nav__phone">+421 900 123 456</a>
-        <a href="#contact" class="btn btn--primary nav__cta">Kontaktovať nás</a>
-        <button class="nav__burger" id="burger" aria-controls="mobileMenu" aria-label="Otvoriť menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+      <nav class="nav__links" aria-label="Hlavná navigácia"><a href="#about" data-nav>O nás</a><a href="#services" data-nav>Služby</a><a href="#gallery" data-nav>Detail techniky</a></nav>
+      <a href="#contact" class="btn btn--small nav__cta"><span class="nav__label">Porozprávajme sa</span><span class="nav__compact">Kontakt</span> <span aria-hidden="true">↗</span></a>
+      <button class="nav__burger" id="burger" aria-controls="mobileMenu" aria-label="Otvoriť menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
-
-  <div class="mobile-menu" id="mobileMenu" inert aria-label="Mobilná navigácia">
-    <button class="mobile-menu__close" id="menuClose" aria-label="Zavrieť menu">×</button>
-    <span class="eyebrow">SPIRITUSVENTI / MENU</span>
-    <a href="#home" data-nav-mobile>Úvod</a>
-    <a href="#about" data-nav-mobile>O nás</a>
-    <a href="#services" data-nav-mobile>Služby</a>
-    <a href="#gallery" data-nav-mobile>Galéria</a>
-    <a href="#contact" data-nav-mobile>Kontakt</a>
-    <a href="#contact" class="btn btn--primary" data-nav-mobile>Kontaktovať nás</a>
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Mobilná navigácia" inert>
+    <button class="mobile-menu__close" id="menuClose" aria-label="Zavrieť menu">×</button><p class="eyebrow">SPIRITUSVENTI</p>
+    <nav aria-label="Mobilná navigácia"><a href="#home">Úvod</a><a href="#about">O nás</a><a href="#services">Služby</a><a href="#gallery">Detail techniky</a><a href="#contact">Kontakt <span aria-hidden="true">↗</span></a></nav>
+    <p class="mobile-menu__note">Dobrý priestor začína vzduchom.</p>
   </div>
   <div class="mobile-menu__backdrop" id="mobileBackdrop"></div>
-
   <main id="main">
-
-    <!-- ================= HERO ================= -->
-    <section class="hero" id="home">
-      <div class="hero__bg" aria-hidden="true">
-        <div class="drift drift--1"></div>
-        <div class="drift drift--2"></div>
-      </div>
-
-      <div class="hero__inner">
+    <section class="hero" id="home" aria-labelledby="heroTitle">
+      <div class="container hero__inner">
         <div class="hero__copy">
-          <p class="hero__notice">Apiagra su kokoti</p>
-          <p class="eyebrow">VZDUCHOTECHNIKA S CITOM PRE DETAIL</p>
-          <h1 class="hero__title">
-            <span class="reveal-line">Dobrý priestor.</span>
-            <span class="reveal-line">Začína vzduchom.</span>
-          </h1>
-          <p class="hero__lead reveal-fade">Návrh, montáž a servis vetrania pre váš domov aj podnikanie. Premyslený systém. Precízne prevedenie. Komfort každý deň.</p>
-          <div class="hero__actions reveal-fade">
-            <a href="#contact" class="btn btn--primary btn--lg">Prebrať môj projekt <span aria-hidden="true">↗</span></a>
-            <a href="#services" class="btn btn--outline btn--lg">Naše služby</a>
-          </div>
-
-          <div class="hero__stats reveal-fade">
-            <div class="hero__stat">
-              <span class="hero__stat-value"><span class="hero__stat-num" data-count="240">0</span><span class="hero__stat-suffix">+</span></span>
-              <span class="hero__stat-label">dokončených projektov</span>
-            </div>
-            <div class="hero__stat">
-              <span class="hero__stat-value"><span class="hero__stat-num" data-count="12">0</span></span>
-              <span class="hero__stat-label">rokov na trhu</span>
-            </div>
-            <div class="hero__stat">
-              <span class="hero__stat-value"><span class="hero__stat-num" data-count="5">0</span><span class="hero__stat-suffix">&nbsp;rokov</span></span>
-              <span class="hero__stat-label">záruka na montáž</span>
-            </div>
-          </div>
+          <p class="eyebrow hero__entry">VZDUCHOTECHNIKA / SPIRITUSVENTI</p>
+          <h1 id="heroTitle" class="hero__title hero__entry">Dajte priestoru<br>voľne <em>dýchať.</em></h1>
+          <p class="hero__lead hero__entry">Návrh, montáž a servis vetrania.<br>Pre pocit pohody doma aj v práci.</p>
+          <div class="hero__actions hero__entry"><a href="#contact" class="btn">Prebrať môj projekt <span aria-hidden="true">↗</span></a><a href="#services" class="text-link">Objaviť služby <span aria-hidden="true">↓</span></a></div>
+          <div class="hero__note hero__entry"><span class="hero__note-line" aria-hidden="true"></span><span>Premyslená technika.<br>Prirodzený komfort.</span></div>
         </div>
-
-        <div class="hero__visual">
-          <div class="airflow-panel">
-            <div class="visual-heading"><span>01 / TECHNOLÓGIA KOMFORTU</span><strong>Neviditeľný systém.<br>Citeľný rozdiel.</strong></div>
-            <svg class="airflow-svg" viewBox="0 0 420 460" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <marker id="flowArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M0 0L10 5L0 10V0Z" fill="currentColor"/>
-                </marker>
-              </defs>
-              <path class="airflow-guide" d="M54 138H366M54 322H366"/>
-              <rect class="air-unit" x="128" y="150" width="164" height="160" rx="22"/>
-              <path class="air-unit__divider" d="M210 174V286"/>
-              <circle class="air-unit__port" cx="170" cy="230" r="18"/>
-              <circle class="air-unit__port" cx="250" cy="230" r="18"/>
-              <circle class="airflow-pulse" cx="170" cy="230" r="20"><animate attributeName="r" values="20;28;20" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".42;0;.42" dur="2.4s" repeatCount="indefinite"/></circle>
-              <circle class="airflow-pulse" cx="250" cy="230" r="20"><animate attributeName="r" values="20;28;20" dur="2.7s" begin="-1.35s" repeatCount="indefinite"/><animate attributeName="opacity" values=".42;0;.42" dur="2.7s" begin="-1.35s" repeatCount="indefinite"/></circle>
-              <path class="airflow-path airflow-path--supply" d="M54 194H151" marker-end="url(#flowArrow)"/>
-              <path class="airflow-path airflow-path--extract" d="M269 266H366" marker-end="url(#flowArrow)"/>
-              <circle class="airflow-particle airflow-particle--supply" r="4"><animateMotion dur="2.4s" repeatCount="indefinite" path="M54 194H151"/></circle>
-              <circle class="airflow-particle airflow-particle--supply" r="3"><animateMotion dur="2.4s" begin="-1.2s" repeatCount="indefinite" path="M54 194H151"/></circle>
-              <circle class="airflow-particle airflow-particle--extract" r="4"><animateMotion dur="2.7s" repeatCount="indefinite" path="M269 266H366"/></circle>
-              <circle class="airflow-particle airflow-particle--extract" r="3"><animateMotion dur="2.7s" begin="-1.35s" repeatCount="indefinite" path="M269 266H366"/></circle>
-              <text class="airflow-label" x="54" y="174">PRÍVOD</text>
-              <text class="airflow-label" x="366" y="246" text-anchor="end">ODVOD</text>
-              <text class="airflow-detail" x="170" y="235" text-anchor="middle">IN</text>
-              <text class="airflow-detail" x="250" y="235" text-anchor="middle">OUT</text>
+        <div class="hero__visual hero__entry" aria-hidden="true">
+          <div class="air-scene">
+            <div class="air-scene__light"></div><div class="air-scene__opening"></div><div class="air-scene__floor"></div>
+            <span class="air-scene__label">NEVIDITEĽNÉ. A PREDSA CITEĽNÉ.</span>
+            <svg class="air-scene__lines" viewBox="0 0 560 620" fill="none" preserveAspectRatio="xMidYMid slice">
+              <defs><linearGradient id="airInk" x1="0" y1="0" x2="560" y2="620" gradientUnits="userSpaceOnUse"><stop stop-color="#e1edcd" stop-opacity=".08"/><stop offset=".5" stop-color="#e1edcd" stop-opacity=".8"/><stop offset="1" stop-color="#e1edcd" stop-opacity=".1"/></linearGradient></defs>
+              <g class="air-scene__stream"><path d="M-60 435C100 435 95 150 265 150S410 430 620 220"/><path d="M-60 459C100 459 95 174 265 174S410 454 620 244"/><path d="M-60 483C100 483 95 198 265 198S410 478 620 268"/><path d="M-60 507C100 507 95 222 265 222S410 502 620 292"/><path d="M-60 531C100 531 95 246 265 246S410 526 620 316"/></g>
+              <path class="air-scene__current" d="M-60 483C100 483 95 198 265 198S410 478 620 268"/>
             </svg>
-
-            <div class="airflow-chip airflow-chip--1">
-              <span class="dot"></span> Výmena vzduchu vypočítaná
-            </div>
-            <div class="airflow-chip airflow-chip--2">
-              Návrh · montáž · servis
-            </div>
+            <div class="air-scene__caption"><span class="air-scene__symbol">↗</span><span>Priestor pre<br><strong>čerstvý vzduch.</strong></span></div><span class="air-scene__index">SV / AIR</span>
           </div>
         </div>
       </div>
+      <div class="container hero__bottom"><span>NÁVRH <i>/</i> MONTÁŽ <i>/</i> SERVIS</span><a href="#about">Spoznajte SpiritusVenti <span aria-hidden="true">↓</span></a></div>
     </section>
-
-    <!-- ================= ABOUT ================= -->
-    <section class="about" id="about">
-      <div class="section-inner about__grid">
-        <div class="about__text reveal-up">
-          <p class="eyebrow">01 / O SPIRITUSVENTI</p><h2 class="section-title">Technický prístup ku každému projektu</h2>
-          <p class="section-lead">
-            Zaoberáme sa návrhom, montážou a servisom vzduchotechnických systémov —
-            od bytov až po výrobné haly. Pred inštaláciou vypočítame výmenu vzduchu, vyberieme zariadenie
-            podľa zaťaženia a hlučnosti a po montáži ručíme za výsledok v dokumentácii.
-          </p>
-          <ul class="about__points">
-            <li>Návrh systému pre konkrétny priestor, nie „štandardná“ súprava</li>
-            <li>Vlastný montážny tím — bez subdodávateľov</li>
-            <li>Servis a čistenie systémov po inštalácii</li>
-          </ul>
-        </div>
-
-        <div class="about__bento">
-          <div class="bento-card bento-card--big reveal-up">
-            <span class="bento-card__num">99%</span>
-            <span class="bento-card__label">projektov dokončených v termíne stanovenom v zmluve</span>
-          </div>
-          <div class="bento-card reveal-up">
-            <span class="bento-card__num">15+</span>
-            <span class="bento-card__label">inžinierov a montérov v tíme</span>
-          </div>
-          <div class="bento-card reveal-up">
-            <span class="bento-card__num">24 h</span>
-            <span class="bento-card__label">výjazd na havarijný zásah v rámci servisných zmlúv</span>
-          </div>
-          <div class="bento-card reveal-up">
-            <span class="bento-card__num">72 h</span>
-            <span class="bento-card__label">vyriešenie problému v rámci servisných zmlúv</span>
-          </div>
-          <div class="bento-card bento-card--wide reveal-up">
-            <span class="bento-card__label bento-card__label--lead">Pracujeme na rezidenčných, komerčných aj priemyselných projektoch — od jednoizbového bytu po výrobnú halu s plochou niekoľko tisíc m².</span>
-          </div>
-        </div>
+    <section class="about section" id="about" aria-labelledby="aboutTitle">
+      <div class="container about__grid">
+        <div class="section-heading reveal"><p class="eyebrow">01 / O NÁS</p><h2 id="aboutTitle">Technika v pozadí.<br><span>Komfort každý deň.</span></h2></div>
+        <div class="about__copy reveal"><p class="lead">Vetranie patrí k priestoru rovnako prirodzene ako svetlo. SpiritusVenti sa venuje návrhu, montáži a servisu vzduchotechnických systémov.</p><p class="muted">Od prvého návrhu po starostlivosť o zariadenie. S pozornosťou k tomu, ako sa priestor používa.</p><ul class="about__points"><li><span aria-hidden="true">↗</span> Riešenie podľa priestoru</li><li><span aria-hidden="true">↗</span> Dôraz na technické detaily</li><li><span aria-hidden="true">↗</span> Montáž aj následná údržba</li></ul></div>
       </div>
     </section>
-
-    <!-- ================= SERVICES ================= -->
-    <section class="services" id="services">
-      <div class="section-inner">
-        <div class="section-head reveal-up">
-          <p class="eyebrow">02 / NAŠE SLUŽBY</p><h2 class="section-title">Riešenie pre váš priestor</h2>
-          <p class="section-lead">Kompletné služby — od návrhu až po servis hotového systému.</p>
-        </div>
-
-        <div class="services__grid">
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9c2.5 0 2.5-3 5-3s2.5 5 5 5 2.5-4 5-4 2.5 3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 15c2.5 0 2.5 3 5 3s2.5-5 5-5 2.5 4 5 4 2.5-3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <h3 class="service-card__title">Montáž vetrania</h3>
-            <p class="service-card__desc">Návrh a inštalácia prívodno-odvodných systémov podľa zaťaženia a účelu priestoru.</p>
-          </article>
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="10" width="20" height="4" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 10V7M12 10V7M18 10V7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </span>
-            <h3 class="service-card__title">Inštalácia vzduchovodov</h3>
-            <p class="service-card__desc">Montáž pevných a flexibilných vzduchovodov, utesnenie spojov a izolované rozvody.</p>
-          </article>
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 21V9l6-4v4l6-4v16" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M15 11h6v10h-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 13h1M7 16h1M11 13h1M11 16h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </span>
-            <h3 class="service-card__title">Priemyselné systémy</h3>
-            <p class="service-card__desc">Vetranie výrobných hál, skladov a prevádzok: vysoký výkon a dostatočná výkonová rezerva.</p>
-          </article>
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 11 12 4l8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v10h12V10" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 20v-6h4v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-            </span>
-            <h3 class="service-card__title">Domáce vetranie</h3>
-            <p class="service-card__desc">Tiché systémy pre byty a domy: čerstvý vzduch bez prievanu a zbytočného hluku.</p>
-          </article>
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <h3 class="service-card__title">Servis systémov</h3>
-            <p class="service-card__desc">Pravidelné čistenie, výmena filtrov, diagnostika a predĺženie životnosti zariadenia.</p>
-          </article>
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="4" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="10.5" width="18" height="4" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="16" width="18" height="4" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <h3 class="service-card__title">Tepelná izolácia</h3>
-            <p class="service-card__desc">Izolácia vzduchovodov a zariadení — bez kondenzácie a tepelných strát v rozvodoch.</p>
-          </article>
-
-          <article class="service-card reveal-up">
-            <span class="service-card__icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <h3 class="service-card__title">Montáž zariadení</h3>
-            <p class="service-card__desc">Inštalácia ventilátorov, rekuperačných jednotiek, prívodných jednotiek a riadiacej automatiky.</p>
-          </article>
-
-        </div>
+    <section class="services section" id="services" aria-labelledby="servicesTitle">
+      <div class="container services__layout">
+        <div class="section-heading reveal"><p class="eyebrow">02 / ČO ROBÍME</p><h2 id="servicesTitle">Vzduch v pohybe.<br><span>Všetko na svojom mieste.</span></h2><p class="muted services__intro">Od rozvodov až po servis.<br>Spolu nájdeme vhodné riešenie.</p><a href="#contact" class="text-link">Čo potrebuje váš priestor? <span aria-hidden="true">↗</span></a></div>
+        <div class="services__list">{% for service in services %}<article class="service reveal"><span class="service__number">{{ service.number }}</span><div><h3>{{ service.title }}</h3><p>{{ service.description }}</p></div><span class="service__arrow" aria-hidden="true">↗</span></article>{% endfor %}</div>
       </div>
     </section>
-
-    <!-- ================= GALLERY ================= -->
-    <section class="gallery" id="gallery">
-      <div class="section-inner">
-        <div class="section-head reveal-up">
-          <p class="eyebrow">03 / DETAILY REALIZÁCIE</p><h2 class="section-title">Technika v praxi</h2>
-          <p class="section-lead">Pozrite si technické riešenia — od rozvodov vzduchu až po servis zariadení.</p>
+    <section class="gallery section" id="gallery" aria-labelledby="galleryTitle">
+      <div class="container">
+        <div class="gallery__head reveal"><div><p class="eyebrow">03 / BLIŽŠIE K TECHNIKE</p><h2 id="galleryTitle">Na detailoch záleží.</h2></div><p class="gallery__note">Pohľad do sveta vzduchotechniky.<br>Ilustračné fotografie.</p></div>
+        <div class="gallery__grid">
+          {% for item in gallery %}<figure class="gallery__item reveal"><button class="gallery__open" type="button" data-image="{% static item.image %}" data-caption="{{ item.title }} — ilustračná fotografia" aria-label="Zväčšiť: {{ item.title }}"><img src="{% static item.thumbnail %}" srcset="{% static item.thumbnail %} 640w, {% static item.image %} {{ item.image_width }}w" sizes="(max-width: 600px) calc((100vw - 44px) / 2), (max-width: 900px) calc((100vw - 80px) / 2), 280px" width="640" height="480" alt="{{ item.alt }}" loading="lazy" decoding="async"><span class="gallery__zoom" aria-hidden="true">↗</span></button><figcaption><span>{{ item.title }}</span><span class="gallery__index" aria-hidden="true">0{{ forloop.counter }}</span></figcaption></figure>{% endfor %}
         </div>
-
-        <div class="gallery__grid" id="galleryGrid">
-          <!-- filled by script.js with placeholder tiles -->
-        </div>
+        <div class="process reveal" aria-label="Ako spolupracujeme"><p>Od zámeru k riešeniu</p><ol><li><span>01</span> Rozhovor o priestore</li><li><span>02</span> Návrh a dohoda</li><li><span>03</span> Montáž a starostlivosť</li></ol></div>
       </div>
     </section>
-
-    <section class="process" aria-labelledby="processTitle"><div class="section-inner"><div class="section-head"><p class="eyebrow">04 / OD ZADANIA K VÝSLEDKU</p><h2 class="section-title" id="processTitle">Jasný postup.<br>Od prvého rozhovoru.</h2></div><div class="process-grid"><article><span>01</span><h3>Spoznáme váš priestor</h3><p>Prejdeme si vaše požiadavky, účel priestoru a možnosti realizácie.</p></article><article><span>02</span><h3>Navrhneme riešenie</h3><p>Vyberieme vhodný systém a dohodneme rozsah prác aj ďalší postup.</p></article><article><span>03</span><h3>Montáž a starostlivosť</h3><p>Zabezpečíme inštaláciu, odovzdanie a následný servis vzduchotechniky.</p></article></div></div></section>
-    <!-- ================= CONTACT ================= -->
-    <section class="contact" id="contact">
-      <div class="section-inner contact__grid">
-
-        <div class="contact__info reveal-up">
-          <p class="eyebrow">05 / ZAČNIME ROZHOVOROM</p><h2 class="section-title">Preberieme váš projekt</h2>
-          <p class="section-lead">Nechajte nám kontakt — zavoláme vám počas pracovného dňa a navrhneme termín návštevy technika.</p>
-
-          <ul class="contact__list">
-            <li>
-              <span class="contact__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5c0-.6.4-1 1-1h3.2c.5 0 .9.3 1 .8l.9 3.4c.1.4 0 .9-.3 1.2L8 11.2c1.2 2.5 3.3 4.6 5.8 5.8l1.8-1.8c.3-.3.8-.4 1.2-.3l3.4.9c.5.1.8.5.8 1V20c0 .6-.4 1-1 1h-1.5C10.5 21 3 13.5 3 4.5V5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
-              <a href="tel:+421900123456">+421 900 123 456</a>
-            </li>
-            <li>
-              <span class="contact__icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <a href="mailto:info@spiritusventi.sk">info@spiritusventi.sk</a>
-            </li>
-            <li>
-              <span class="contact__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.5"/></svg></span>
-              <span>Žilina, Priemyselná 10</span>
-            </li>
-          </ul>
-
-
-
-          <a href="tel:+421900123456" class="btn btn--primary btn--lg contact__big-cta">Zavolať teraz</a>
+    <section class="contact section" id="contact" aria-labelledby="contactTitle">
+      <div class="container contact__grid">
+        <div class="contact__copy reveal"><p class="eyebrow">04 / ZAČNIME ROZHOVOROM</p><h2 id="contactTitle">Váš priestor.<br><em>Náš ďalší rozhovor.</em></h2><p class="lead">Nový projekt alebo existujúci systém?<br>Povedzte nám, čo potrebujete.</p>
+          {% if contacts.phone or contacts.email or contacts.address %}<ul class="contact__details">{% if contacts.phone %}<li><span>Telefón</span><a href="{{ contacts.phone.href }}">{{ contacts.phone.value }}</a></li>{% endif %}{% if contacts.email %}<li><span>E-mail</span><a href="{{ contacts.email.href }}">{{ contacts.email.value }}</a></li>{% endif %}{% if contacts.address %}<li><span>Adresa</span>{{ contacts.address.value }}</li>{% endif %}</ul>{% else %}<p class="contact__pending">Priame kontaktné údaje pripravujeme.</p>{% endif %}
+          <svg class="contact__air" viewBox="0 0 400 100" fill="none" aria-hidden="true"><path d="M0 55C100 55 80 10 160 10s90 80 160 65 60-45 100-45M0 70C100 70 80 25 160 25s90 80 160 65 60-45 100-45M0 40C100 40 80-5 160-5s90 80 160 65 60-45 100-45"/></svg>
         </div>
-
-        <form class="contact__form reveal-up" id="contactForm" action="{% url 'contact' %}" method="post">
-          {% csrf_token %}
-          <div class="form-heading"><h3>Povedzte nám o svojom projekte</h3><p>Stačí pár detailov. Ozveme sa vám.</p></div>
-          <div class="field">
-            <label for="fName">Meno</label>
-            <input type="text" id="fName" name="name" autocomplete="name" placeholder="Ako vás môžeme oslovovať" required>
-          </div>
-          <div class="field">
-            <label for="fPhone">Telefón</label>
-            <input type="tel" id="fPhone" name="phone" autocomplete="tel" placeholder="+421 9__ ___ ___" required>
-          </div>
-          <div class="field">
-            <label for="fEmail">Email</label>
-            <input type="email" id="fEmail" name="email" autocomplete="email" placeholder="name@mail.com">
-          </div>
-          <div class="field">
-            <label for="fMsg">Správa</label>
-            <textarea id="fMsg" name="message" rows="4" placeholder="Stručne opíšte svoju požiadavku alebo projekt"></textarea>
-          </div>
-          <button type="submit" class="btn btn--primary btn--lg field__submit">
-            <span class="btn-label">Odoslať požiadavku</span>
-          </button>
+        <form class="contact__form reveal" id="contactForm" action="{% url 'contact' %}" method="post" data-ready="{{ contact_ready|yesno:'true,false' }}">
+          {% csrf_token %}<div class="form-heading"><h3>Povedzte nám viac.</h3><p>Krátka správa je dobrý začiatok.</p></div>
+          {% if not contact_ready %}<p class="form-notice" id="formNotice">Formulár zatiaľ neprijíma správy. Odosielanie pripravujeme.</p>{% endif %}
+          <fieldset{% if not contact_ready %} disabled aria-describedby="formNotice"{% endif %}>
+            <legend class="sr-only">Údaje pre vašu požiadavku</legend>
+            <div class="form-row"><div class="field"><label for="fName">Meno <span aria-hidden="true">*</span></label><input type="text" id="fName" name="name" autocomplete="name" placeholder="Vaše meno" minlength="2" maxlength="100" required></div><div class="field"><label for="fPhone">Telefón <span aria-hidden="true">*</span></label><input type="tel" id="fPhone" name="phone" autocomplete="tel" placeholder="Vaše telefónne číslo" maxlength="30" required></div></div>
+            <div class="field"><label for="fEmail">E-mail <span class="field__optional">/ nepovinné</span></label><input type="email" id="fEmail" name="email" autocomplete="email" placeholder="vas@email.sk" maxlength="254"></div>
+            <div class="field"><label for="fMsg">O vašom projekte <span class="field__optional">/ nepovinné</span></label><textarea id="fMsg" name="message" rows="3" maxlength="5000" placeholder="Čo by ste chceli vo svojom priestore zmeniť?"></textarea></div>
+            <button type="submit" class="btn field__submit"><span class="btn-label">Odoslať požiadavku</span><span aria-hidden="true">↗</span></button>
+          </fieldset>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+          <noscript><p class="form-notice">Na odoslanie formulára zapnite JavaScript.</p><style>.field__submit{display:none}</style></noscript>
         </form>
-
       </div>
     </section>
-
   </main>
-
-  <!-- ================= FOOTER ================= -->
   <footer class="footer">
-    <div class="section-inner footer__inner">
-      <div class="footer__intro">
-        <div><p class="footer__eyebrow">NÁVRH · MONTÁŽ · SERVIS</p><p class="footer__headline">Dajme vášmu priestoru<br>nový nádych.</p></div>
-        <a class="btn footer__cta" href="#contact">Prebrať projekt <span aria-hidden="true">↗</span></a>
-      </div>
-      <div class="footer__main">
-      <div class="footer__identity">
-      <a href="#home" class="nav__brand footer__brand">
-        <span class="nav__mark" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 16C10 16 10 8 16 8C22 8 22 20 28 20C34 20 34 12 36 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-            <path d="M4 24C10 24 10 32 16 32C22 32 22 20 28 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0.55"/>
-          </svg>
-        </span>
-        <span class="nav__word">Spiritus<em>Venti</em></span>
-      </a>
-        <p class="footer__tagline">Čerstvý vzduch pre domov aj podnikanie.</p>
-      </div>
-      <nav class="footer__links" aria-label="Navigácia v pätičke">
-        <a href="#home">Úvod</a>
-        <a href="#about">O nás</a>
-        <a href="#services">Služby</a>
-        <a href="#gallery">Galéria</a>
-        <a href="#contact">Kontakt</a>
-      </nav>
-      <div class="footer__connect">
-        <p class="footer__label">Sledujte nás</p>
-          <div class="footer__social">
-            <a href="https://instagram.com/spiritusventi" target="_blank" rel="noopener" class="social-btn social-btn--insta">
-              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></svg>
-              <span>@spiritusventi</span>
-            </a>
-          </div>
-      </div>
-      </div>
-      <div class="footer__bottom">
-      <p class="footer__copy">© <span id="year"></span> SpiritusVenti. Všetky práva vyhradené.</p>
-        <a class="footer__back" href="#home">Späť na začiatok <span aria-hidden="true">↑</span></a>
-      </div>
-    </div>
-    <div class="footer__air" aria-hidden="true">
-      <svg viewBox="0 0 1440 110" fill="none" preserveAspectRatio="none">
-        <path d="M-100 65C160 135 290-10 540 60S900 130 1150 55S1430 35 1540 65"/>
-        <path d="M-100 85C160 155 290 10 540 80S900 150 1150 75S1430 55 1540 85"/>
-        <path d="M-100 45C160 115 290-30 540 40S900 110 1150 35S1430 15 1540 45"/>
-      </svg>
-    </div>
+    <div class="container footer__main"><a href="#home" class="brand" aria-label="SpiritusVenti — úvod"><svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M4 16c6 0 6-8 12-8s6 12 12 12 6-8 8-8M4 24c6 0 6 8 12 8s6-12 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Spiritus<strong>Venti</strong><span class="brand__period">.</span></span></a><p>Dobrý priestor začína vzduchom.</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true">↑</span></a></div>
+    <div class="container footer__bottom"><p>© {% now 'Y' %} SpiritusVenti</p><nav aria-label="Navigácia v pätičke"><a href="#services">Služby</a><a href="#contact">Kontakt</a>{% if contacts.instagram %}<a href="{{ contacts.instagram.href }}" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a>{% endif %}</nav><span>NÁVRH / MONTÁŽ / SERVIS</span></div>
   </footer>
-
-  <button class="to-top" id="toTop" aria-label="Späť hore">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxCaption" inert>
-    <button class="lightbox__close" id="lightboxClose" aria-label="Zavrieť">&times;</button>
-    <div class="lightbox__frame" id="lightboxFrame"></div>
-    <p class="lightbox__caption" id="lightboxCaption"></p>
-  </div>
-
-  <div class="mobile-contact"><span>Váš priestor.<br><strong>Naše riešenie.</strong></span><a class="btn btn--primary" href="#contact">Prebrať projekt <span aria-hidden="true">↗</span></a></div>
-  <!-- Toast -->
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="{% static 'script.js' %}" data-assets-url="{% static '' %}" defer></script>
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightboxCaption"><button class="lightbox__close" id="lightboxClose" aria-label="Zavrieť fotografiu">×</button><div class="lightbox__frame" id="lightboxFrame"></div><p id="lightboxCaption"></p></dialog>
 </body>
 </html>
