@@ -1,5 +1,39 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // CSS runs the flow by itself. A short interaction adjusts its playback rate
+  // without restarting the cycle or moving the heading/button.
+  const heroButton = document.querySelector('.hero__actions > .btn');
+  let flowFrame = 0, flowReset = 0;
+  function easeFlow(target, duration) {
+    cancelAnimationFrame(flowFrame);
+    const animations = [...document.querySelectorAll('.air-scene__current')]
+      .flatMap(line => line.getAnimations()).filter(animation => animation.animationName === 'air-current');
+    if (!animations.length) return;
+    const initial = animations.map(animation => animation.playbackRate);
+    const start = performance.now();
+    function step(now) {
+      if (motion.matches) return;
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = progress * progress * (3 - 2 * progress);
+      animations.forEach((animation, index) => {
+        animation.updatePlaybackRate(initial[index] + (target - initial[index]) * eased);
+      });
+      if (progress < 1) flowFrame = requestAnimationFrame(step);
+    }
+    flowFrame = requestAnimationFrame(step);
+  }
+  function boostFlow() {
+    if (motion.matches) return;
+    clearTimeout(flowReset);
+    easeFlow(1.35, 400);
+    flowReset = setTimeout(() => easeFlow(1, 900), 1500);
+  }
+  heroButton.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') boostFlow(); });
+  heroButton.addEventListener('focus', () => { if (heroButton.matches(':focus-visible')) boostFlow(); });
+  motion.addEventListener('change', () => {
+    cancelAnimationFrame(flowFrame);
+    clearTimeout(flowReset);
+  });
   const nav = document.getElementById('nav');
   const burger = document.getElementById('burger');
   const menu = document.getElementById('mobileMenu');

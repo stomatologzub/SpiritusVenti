@@ -21,6 +21,13 @@ with sync_playwright() as playwright:
         page.goto(URL, wait_until='networkidle')
         page.evaluate('document.fonts.ready')
         page.wait_for_timeout(750)
+        visible_flows = page.locator('.air-scene__current:visible').count()
+        assert visible_flows == (2 if width <= 600 else 5), (width, visible_flows)
+        assert page.locator('.air-scene__current').first.evaluate('(el) => getComputedStyle(el).animationDuration') == '8s'
+        copy = page.locator('.hero__copy').bounding_box()
+        visual = page.locator('.hero__visual').bounding_box()
+        assert copy['x'] + copy['width'] <= visual['x'] + 1 or copy['y'] + copy['height'] <= visual['y'] + 1
+        page.screenshot(path=str(OUT / f'hero-{width}.png'))
         for element in page.locator('.reveal').all():
             element.scroll_into_view_if_needed()
         page.wait_for_timeout(600)
@@ -59,9 +66,29 @@ with sync_playwright() as playwright:
         assert button.evaluate('(el) => el === document.activeElement')
         report.append({'width': width, 'horizontal_overflow': False, 'anchors_menu_gallery': 'passed'})
 
+    page.goto(URL, wait_until='networkidle')
+    page.wait_for_timeout(800)
+    hero_button = page.locator('.hero__actions > .btn')
+    get_rate = "document.querySelector('.air-scene__current').getAnimations().find(a => a.animationName === 'air-current').playbackRate"
+    heading_before = page.locator('#heroTitle').bounding_box()
+    hero_button.hover()
+    page.wait_for_timeout(650)
+    assert page.evaluate(get_rate) > 1.2
+    page.wait_for_timeout(2000)
+    assert abs(page.evaluate(get_rate) - 1) < .01
+    page.mouse.move(0, 0)
+    page.locator('.hero__actions .text-link').focus()
+    page.keyboard.press('Shift+Tab')
+    assert hero_button.evaluate('(el) => el === document.activeElement && el.matches(":focus-visible")')
+    page.wait_for_timeout(650)
+    assert page.evaluate(get_rate) > 1.2
+    assert page.locator('#heroTitle').bounding_box() == heading_before
+
     page.emulate_media(reduced_motion='reduce')
     page.goto(URL, wait_until='networkidle')
-    assert page.locator('.air-scene__current').evaluate('(el) => getComputedStyle(el).animationName') == 'none'
+    assert page.locator('.air-scene__current').first.evaluate('(el) => getComputedStyle(el).animationName') == 'none'
+    assert page.locator('.air-scene__current:visible').count() == 0
+    assert page.locator('.air-scene__stream').evaluate('(el) => getComputedStyle(el).strokeOpacity') == '0.48'
     assert page.locator('.hero__title').evaluate('(el) => getComputedStyle(el).animationName') == 'none'
     page.emulate_media(reduced_motion='no-preference')
 
@@ -88,6 +115,6 @@ with sync_playwright() as playwright:
     assert nojs.locator('.field__submit').is_hidden()
     assert nojs.evaluate('document.documentElement.scrollWidth <= innerWidth')
     browser.close()
-    result = {'layouts': report, 'reduced_motion': 'passed', 'form_mocked_error_and_success': 'passed', 'no_javascript': 'passed', 'browser_errors': errors}
+    result = {'layouts': report, 'hero_hover_keyboard_and_eight_second_flow': 'passed', 'reduced_motion': 'passed', 'form_mocked_error_and_success': 'passed', 'no_javascript': 'passed', 'browser_errors': errors}
     (OUT / 'checks.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))
