@@ -39,6 +39,14 @@ with sync_playwright() as playwright:
         assert page.locator('h1').count() == 1
         assert page.locator('.gallery__open img').evaluate_all('(images) => images.every(i => i.complete && i.naturalWidth > 0)')
         assert page.locator('label[for]').count() == 4
+        page.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)')
+        page.wait_for_timeout(700)
+        footer = page.locator('footer').bounding_box()
+        assert abs(footer['y'] + footer['height'] - page.viewport_size['height']) <= 2, (width, footer)
+        assert page.locator('footer').evaluate('el => el.scrollWidth <= el.clientWidth'), width
+        assert page.locator('footer .footer__navigation a').count() == 4
+        assert page.locator('.footer__contact').is_visible()
+        page.screenshot(path=str(OUT / f'footer-{width}.png'))
         page.locator('a.footer__back').click()
         page.wait_for_timeout(700)
         page.screenshot(path=str(OUT / f'page-{width}.png'), full_page=True)

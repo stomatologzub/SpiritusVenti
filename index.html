@@ -7,7 +7,7 @@
   <title>Spiritus Venti — Vzduch, ktorý pracuje pre vás.</title>
   <meta name="description" content="Profesionálne riešenia VZT. Revízie, montáže a klimatizačné riešenia pre zdravšie a komfortnejšie priestory.">
   <meta name="theme-color" content="#102A43">
-  <link rel="icon" type="image/png" href="{% static 'brand/favicon.png' %}">
+  <link rel="icon" type="image/png" sizes="128x128" href="{% static 'brand/favicon-transparent.png' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -107,8 +107,27 @@
     </section>
   </main>
   <footer class="footer">
-    <div class="container footer__main"><a href="#home" class="brand" aria-label="SpiritusVenti — úvod"><img class="brand__logo" src="{% static 'brand/symbol.png' %}" alt="Spiritus Venti"></a><p>Vzduch, ktorý pracuje pre vás.</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
-    <div class="container footer__bottom"><p>© {% now 'Y' %} SpiritusVenti</p><nav aria-label="Navigácia v pätičke"><a href="#services">Služby</a><a href="#contact">Kontakt</a>{% if contacts.instagram %}<a href="{{ contacts.instagram.href }}" target="_blank" rel="noopener">Instagram <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>{% endif %}</nav><span>NÁVRH / MONTÁŽ / SERVIS</span></div>
+    <div class="container footer__layout">
+      <div class="footer__identity">
+        <a href="#home" class="brand" aria-label="Spiritus Venti — úvod"><img class="brand__logo" src="{% static 'brand/symbol.png' %}" width="1108" height="372" alt="Spiritus Venti"></a>
+        <p class="footer__name">SPIRITUS VENTI</p>
+        <p class="footer__slogan">Vzduch, ktorý pracuje pre vás.</p>
+        <p class="footer__description">Profesionálne riešenia VZT pre zdravšie a komfortnejšie priestory.</p>
+      </div>
+      <nav class="footer__navigation" aria-label="Navigácia v pätičke">
+        <h2 class="footer__heading">Navigácia</h2>
+        <a href="#about">O nás</a><a href="#services">Naše služby</a><a href="#gallery">Detail techniky</a><a href="#contact">Kontakt</a>
+      </nav>
+      <div class="footer__enquiry">
+        <h2 class="footer__heading">Váš projekt</h2>
+        <p>Revízie VZT · Montáže VZT<br>Klimatizačné riešenia</p>
+        <a class="footer__contact" href="#contact">Odoslať nezáväzný dopyt <span aria-hidden="true">↗</span></a>
+        {% if contacts.email %}<a class="footer__direct" href="{{ contacts.email.href }}">{{ contacts.email.value }}</a>{% endif %}
+        {% if contacts.phone %}<a class="footer__direct" href="{{ contacts.phone.href }}">{{ contacts.phone.value }}</a>{% endif %}
+        {% if contacts.instagram %}<a class="footer__direct" href="{{ contacts.instagram.href }}" target="_blank" rel="noopener">Instagram ↗</a>{% endif %}
+      </div>
+    </div>
+    <div class="container footer__meta"><p>© {% now 'Y' %} Spiritus Venti</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true">↑</span></a></div>
   </footer>
   <dialog class="lightbox" id="lightbox" aria-labelledby="lightboxCaption"><button class="lightbox__close" id="lightboxClose" aria-label="Zavrieť fotografiu">×</button><div class="lightbox__frame" id="lightboxFrame"></div><p id="lightboxCaption"></p></dialog>
 </body>

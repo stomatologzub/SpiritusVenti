@@ -129,3 +129,36 @@ h2,.services .section-heading h2,.contact h2{font-size:clamp(32px,3vw,40px);line
 @media(max-width:900px){.hero__title{font-size:clamp(36px,4.8vw,48px)}.hero__lead{font-size:16px}.eyebrow{font-size:11px}.air-scene__caption{font-size:18px}.footer__main{flex-wrap:wrap}.footer__main>p{font-size:13px}}
 @media(max-width:600px){.brand__logo{width:72px}.nav__inner{gap:8px}.nav__cta{padding-inline:10px;font-size:10px}.hero__title{font-size:clamp(38px,8.8vw,52px);line-height:1.12}.hero__copy>.eyebrow{font-size:10px;letter-spacing:.08em}.hero__lead{font-size:16px}.air-scene{border-radius:20px}.eyebrow{font-size:11px}.about__copy>.muted,.services__intro,.service p{font-size:16px}.footer__main .brand{padding:0}.footer__main .brand__logo{width:72px}.footer__main>p{font-size:13px}.footer__bottom{font-size:10px}.service h3{font-size:22px}.contact__form{padding:24px 20px}}
 @media(max-width:350px){.nav__cta{display:inline-flex}.hero__title{font-size:36px}.footer__back{gap:8px}}
+
+/* The document ends at the footer, including mobile safe areas and overscroll. */
+html{background:#102A43;overflow-x:clip}
+body{min-width:0}
+dialog:not([open]){display:none}
+.footer{padding:48px 0 calc(12px + env(safe-area-inset-bottom,0px));margin:0;background:#102A43;color:#F2F8FA}
+.footer__layout{display:grid;grid-template-columns:1.4fr .7fr 1fr;gap:56px;padding-bottom:36px}
+.footer__layout>*{min-width:0}
+.footer__identity .brand__logo{width:96px;height:auto}
+.footer__name{font-size:14px;font-weight:600;letter-spacing:.14em;margin-top:16px}
+.footer__slogan{font-size:15px;font-weight:500;margin-top:8px}
+.footer__description{font-size:13px;color:#b8ccda;line-height:1.8;max-width:36ch;margin-top:12px}
+.footer .footer__heading{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#fff;line-height:1.5;margin:0 0 16px}
+.footer__navigation{display:flex;flex-direction:column;align-items:flex-start}
+.footer__navigation a{font-size:13px;min-height:40px;display:inline-flex;align-items:center}
+.footer__enquiry p{font-size:13px;line-height:1.9;color:#b8ccda}
+.footer__contact{display:inline-flex;gap:20px;align-items:center;min-height:44px;border-bottom:1px solid #ffffff55;font-size:13px;font-weight:500;margin-top:14px;max-width:100%}
+.footer__direct{display:block;font-size:13px;padding-top:12px;overflow-wrap:anywhere}
+.footer__meta{border-top:1px solid #ffffff26;padding-top:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:11px;color:#b8ccda}
+.footer__back{font-size:12px;gap:18px;flex:none}
+.footer a:focus-visible{outline-color:#27A9E1}
+@media(max-width:900px){.footer__layout{gap:30px;grid-template-columns:1.2fr .8fr 1fr}}
+@media(max-width:600px){
+  .footer{padding-top:32px}
+  .footer__layout{grid-template-columns:1fr 1fr;gap:28px 20px;padding-bottom:28px}
+  .footer__identity{grid-column:1/-1}
+  .footer__identity .brand__logo{width:80px}
+  .footer__description{max-width:40ch}
+  .footer__enquiry p{font-size:12px}
+  .footer__contact{font-size:12px;gap:8px;line-height:1.6}
+  .footer__meta{flex-wrap:wrap;font-size:10px}
+  .footer__back{font-size:11px}
+}
