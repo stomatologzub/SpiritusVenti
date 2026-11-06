@@ -20,7 +20,7 @@
   <header class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#home" class="brand" aria-label="SpiritusVenti — úvod">
-        <img class="brand__logo" src="{% static 'brand/logo-horizontal.png' %}" width="2055" height="554" alt="Spiritus Venti — Revízie VZT, Montáže VZT, Klimatizačné jednotky">
+        <img class="brand__logo" src="{% static 'brand/symbol.png' %}" alt="Spiritus Venti">
       </a>
       <nav class="nav__links" aria-label="Hlavná navigácia"><a href="#about" data-nav>O nás</a><a href="#services" data-nav>Služby</a><a href="#gallery" data-nav>Detail techniky</a></nav>
       <a href="#contact" class="btn btn--small nav__cta"><span class="nav__label">Kontaktujte nás</span><span class="nav__compact">Kontakt</span> <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
@@ -107,7 +107,7 @@
     </section>
   </main>
   <footer class="footer">
-    <div class="container footer__main"><a href="#home" class="brand" aria-label="SpiritusVenti — úvod"><img class="brand__logo" src="{% static 'brand/logo-horizontal.png' %}" width="2055" height="554" alt="Spiritus Venti — Revízie VZT, Montáže VZT, Klimatizačné jednotky"></a><p>Vzduch, ktorý pracuje pre vás.</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+    <div class="container footer__main"><a href="#home" class="brand" aria-label="SpiritusVenti — úvod"><img class="brand__logo" src="{% static 'brand/symbol.png' %}" alt="Spiritus Venti"></a><p>Vzduch, ktorý pracuje pre vás.</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
     <div class="container footer__bottom"><p>© {% now 'Y' %} SpiritusVenti</p><nav aria-label="Navigácia v pätičke"><a href="#services">Služby</a><a href="#contact">Kontakt</a>{% if contacts.instagram %}<a href="{{ contacts.instagram.href }}" target="_blank" rel="noopener">Instagram <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>{% endif %}</nav><span>NÁVRH / MONTÁŽ / SERVIS</span></div>
   </footer>
   <dialog class="lightbox" id="lightbox" aria-labelledby="lightboxCaption"><button class="lightbox__close" id="lightboxClose" aria-label="Zavrieť fotografiu">×</button><div class="lightbox__frame" id="lightboxFrame"></div><p id="lightboxCaption"></p></dialog>
