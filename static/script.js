@@ -1,5 +1,73 @@
 document.addEventListener('DOMContentLoaded', () => {
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const hero = document.querySelector('.hero__inner');
+  const ribbon = hero.querySelector('.hero-ribbon');
+  const heroButton = hero.querySelector('.hero__actions > .btn');
+  const route = ribbon.querySelector('#ribbonRoute');
+  let ribbonFrame = 0, responseAnimation;
+  // Geometry changes only on resize/font load, never in the animation loop.
+  function positionRibbon() {
+    const box = hero.getBoundingClientRect();
+    const relative = element => {
+      const r = element.getBoundingClientRect();
+      return { x: r.left - box.left, y: r.top - box.top, right: r.right - box.left,
+        bottom: r.bottom - box.top, width: r.width, height: r.height };
+    };
+    const room = relative(hero.querySelector('.air-scene__portal'));
+    const scene = relative(hero.querySelector('.hero__visual'));
+    const button = relative(heroButton);
+    const stacked = window.matchMedia('(max-width: 600px)').matches;
+    const startX = scene.right - 10, startY = room.y + room.height * .55;
+    const endX = button.right + 9, endY = stacked ? button.bottom + 9 : button.y + button.height * .65;
+    const left = Math.max(scene.x + 10, room.x - 28), top = room.y - 12;
+    const middle = room.x + room.width / 2;
+    let d = `M${startX} ${startY} C${room.right + 30} ${startY} ${room.right + 25} ${top} ${middle} ${top}`;
+    d += ` C${left} ${top} ${left + 20} ${room.bottom} ${left} ${room.bottom - 15}`;
+    if (stacked) {
+      d += ` C12 ${room.bottom + 15} 10 ${button.bottom + 65} 28 ${button.bottom + 40}`;
+      d += ` S${endX - 25} ${button.bottom + 50} ${endX} ${endY}`;
+    } else {
+      const gap = scene.x - 26;
+      d += ` C${left - 65} ${room.bottom} ${gap + 45} ${endY - 85} ${gap} ${endY - 55}`;
+      d += ` S${gap - 65} ${endY + 65} ${endX} ${endY}`;
+    }
+    ribbon.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
+    route.setAttribute('d', d);
+    const ink = ribbon.querySelector('#ribbonInk');
+    Object.entries({ x1: startX, y1: startY, x2: endX, y2: endY }).forEach(([key, value]) => ink.setAttribute(key, value));
+    const mask = ribbon.querySelector('#ribbonSafeArea');
+    const area = ribbon.querySelector('.hero-ribbon__area');
+    [mask, area].forEach(element => { element.setAttribute('width', box.width); element.setAttribute('height', box.height); });
+    const shields = [...hero.querySelectorAll('.hero__copy > :not(.hero__actions), .hero__actions > *, .air-scene__caption, .air-scene__label')].map(element => {
+      const r = relative(element);
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      Object.entries({ x: r.x - 6, y: r.y - 6, width: r.width + 12, height: r.height + 12, rx: 6 })
+        .forEach(([key, value]) => rect.setAttribute(key, value));
+      return rect;
+    });
+    ribbon.querySelector('.hero-ribbon__shields').replaceChildren(...shields);
+  }
+  function queueRibbon() {
+    cancelAnimationFrame(ribbonFrame);
+    ribbonFrame = requestAnimationFrame(positionRibbon);
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(queueRibbon).observe(hero);
+  window.addEventListener('resize', queueRibbon, { passive: true });
+  document.fonts.ready.then(queueRibbon);
+  hero.addEventListener('animationend', event => { if (event.animationName === 'quiet-entry') queueRibbon(); });
+  positionRibbon();
+  function inhale() {
+    if (motion.matches || !ribbon.querySelector('.hero-ribbon__response').animate) return;
+    responseAnimation?.cancel();
+    responseAnimation = ribbon.querySelector('.hero-ribbon__response').animate([
+      { strokeDashoffset: 20, opacity: 0 },
+      { strokeDashoffset: 0, opacity: .65, offset: .2 },
+      { strokeDashoffset: -100, opacity: 0 },
+    ], { duration: 1800, easing: 'ease-out' });
+  }
+  heroButton.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') inhale(); });
+  heroButton.addEventListener('focus', () => { if (heroButton.matches(':focus-visible')) inhale(); });
+  motion.addEventListener('change', () => responseAnimation?.cancel());
   const nav = document.getElementById('nav');
   const burger = document.getElementById('burger');
   const menu = document.getElementById('mobileMenu');

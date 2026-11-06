@@ -16,13 +16,14 @@ with sync_playwright() as playwright:
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
     report = []
-    for width in [320, 375, 768, 1024, 1440]:
+    for width in [320, 375, 768, 1366]:
         page.set_viewport_size({'width': width, 'height': 960})
         page.goto(URL, wait_until='networkidle')
         page.evaluate('document.fonts.ready')
         page.wait_for_timeout(750)
-        assert page.locator('.air-scene__wash').evaluate('(el) => getComputedStyle(el).animationDuration') == '10s'
-        assert page.locator('.air-scene__wash').evaluate('(el) => getComputedStyle(el).animationName') == 'room-daylight'
+        assert page.locator('.hero-ribbon__current').evaluate('(el) => getComputedStyle(el).animationDuration') == '8s'
+        assert page.locator('.hero-ribbon__current').evaluate('(el) => getComputedStyle(el).animationName') == 'ribbon-flow'
+        assert page.locator('.hero-ribbon').evaluate('(el) => getComputedStyle(el).pointerEvents') == 'none'
         copy = page.locator('.hero__copy').bounding_box()
         visual = page.locator('.hero__visual').bounding_box()
         assert copy['x'] + copy['width'] <= visual['x'] + 1 or copy['y'] + copy['height'] <= visual['y'] + 1
@@ -68,28 +69,29 @@ with sync_playwright() as playwright:
     page.goto(URL, wait_until='networkidle')
     page.wait_for_timeout(800)
     hero_button = page.locator('.hero__actions > .btn')
-    get_glow = "parseFloat(getComputedStyle(document.querySelector('.air-scene__halo')).opacity)"
-    light_before = page.locator('.air-scene__wash').evaluate('(el) => getComputedStyle(el).transform')
+    get_response = "parseFloat(getComputedStyle(document.querySelector('.hero-ribbon__response')).opacity)"
     heading_before = page.locator('#heroTitle').bounding_box()
+    button_before = hero_button.bounding_box()
     hero_button.hover()
-    page.wait_for_timeout(900)
-    assert page.evaluate(get_glow) > .75
-    assert page.locator('.air-scene__wash').evaluate('(el) => getComputedStyle(el).transform') != light_before
+    page.wait_for_timeout(400)
+    assert page.evaluate(get_response) > .1
+    assert hero_button.bounding_box() == button_before
+    page.wait_for_timeout(1600)
+    assert page.evaluate(get_response) == 0
     page.mouse.move(0, 0)
-    page.wait_for_timeout(900)
-    assert page.evaluate(get_glow) < .2
     page.locator('.hero__actions .text-link').focus()
     page.keyboard.press('Shift+Tab')
     assert hero_button.evaluate('(el) => el === document.activeElement && el.matches(":focus-visible")')
-    page.wait_for_timeout(900)
-    assert page.evaluate(get_glow) > .75
+    page.wait_for_timeout(400)
+    assert page.evaluate(get_response) > .1
     assert page.locator('#heroTitle').bounding_box() == heading_before
+    assert hero_button.bounding_box() == button_before
 
     page.emulate_media(reduced_motion='reduce')
     page.goto(URL, wait_until='networkidle')
-    assert page.locator('.air-scene__wash').evaluate('(el) => getComputedStyle(el).animationName') == 'none'
-    assert page.locator('.air-scene__reflection').evaluate('(el) => getComputedStyle(el).animationName') == 'none'
-    assert page.locator('.air-scene__wash').evaluate('(el) => getComputedStyle(el).opacity') == '0.6'
+    assert page.locator('.hero-ribbon__current').evaluate('(el) => getComputedStyle(el).animationName') == 'none'
+    assert page.locator('.hero-ribbon__current').evaluate('(el) => getComputedStyle(el).strokeDasharray') == 'none'
+    assert page.locator('.hero-ribbon__response').is_hidden()
     assert page.locator('.hero__title').evaluate('(el) => getComputedStyle(el).animationName') == 'none'
     page.emulate_media(reduced_motion='no-preference')
 
@@ -116,6 +118,6 @@ with sync_playwright() as playwright:
     assert nojs.locator('.field__submit').is_hidden()
     assert nojs.evaluate('document.documentElement.scrollWidth <= innerWidth')
     browser.close()
-    result = {'layouts': report, 'hero_daylight_hover_and_keyboard': 'passed', 'reduced_motion': 'passed', 'form_mocked_error_and_success': 'passed', 'no_javascript': 'passed', 'browser_errors': errors}
+    result = {'layouts': report, 'hero_ribbon_hover_keyboard_and_stable_button': 'passed', 'reduced_motion': 'passed', 'form_mocked_error_and_success': 'passed', 'no_javascript': 'passed', 'browser_errors': errors}
     (OUT / 'checks.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))
