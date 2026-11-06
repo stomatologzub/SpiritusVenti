@@ -111,16 +111,11 @@
       <div class="footer__identity">
         <a href="#home" class="brand" aria-label="Spiritus Venti — úvod"><img class="brand__logo" src="{% static 'brand/symbol.png' %}" width="1108" height="372" alt="Spiritus Venti"></a>
         <p class="footer__name">SPIRITUS VENTI</p>
-        <p class="footer__slogan">Vzduch, ktorý pracuje pre vás.</p>
-        <p class="footer__description">Profesionálne riešenia VZT pre zdravšie a komfortnejšie priestory.</p>
       </div>
       <nav class="footer__navigation" aria-label="Navigácia v pätičke">
-        <h2 class="footer__heading">Navigácia</h2>
         <a href="#about">O nás</a><a href="#services">Naše služby</a><a href="#gallery">Detail techniky</a><a href="#contact">Kontakt</a>
       </nav>
       <div class="footer__enquiry">
-        <h2 class="footer__heading">Váš projekt</h2>
-        <p>Revízie VZT · Montáže VZT<br>Klimatizačné riešenia</p>
         <a class="footer__contact" href="#contact">Odoslať nezáväzný dopyt <span aria-hidden="true">↗</span></a>
         {% if contacts.email %}<a class="footer__direct" href="{{ contacts.email.href }}">{{ contacts.email.value }}</a>{% endif %}
         {% if contacts.phone %}<a class="footer__direct" href="{{ contacts.phone.href }}">{{ contacts.phone.value }}</a>{% endif %}
