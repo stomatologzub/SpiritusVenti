@@ -160,15 +160,16 @@ dialog:not([open]){display:none}
 @media(max-width:600px){
   .footer{padding-top:24px;padding-bottom:env(safe-area-inset-bottom,0px)}
   .footer__layout{grid-template-columns:1fr;gap:2px;padding-bottom:4px}
+  .footer__identity{justify-content:center;text-align:center}
   .footer__identity .brand{min-height:36px}
   .footer__identity .brand__logo{width:64px}
   .footer__name{margin:0;font-size:12px}
   .footer__navigation{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
   .footer__navigation .footer__heading{grid-column:1/-1;margin-bottom:2px}
-  .footer__navigation a{min-height:32px}
+  .footer__navigation a{min-height:32px;justify-content:center;text-align:center}
   .footer__enquiry .footer__heading{margin-bottom:2px}
   .footer__contact{font-size:12px;gap:8px;line-height:1.6}
-  .footer__enquiry{justify-self:start;padding-block:4px}
-  .footer__meta{flex-wrap:wrap;font-size:10px}
+  .footer__enquiry{justify-self:center;padding-block:4px;text-align:center}
+  .footer__meta{flex-wrap:wrap;justify-content:center;column-gap:24px;font-size:10px;text-align:center}
   .footer__back{font-size:11px;min-height:36px}
 }

@@ -117,13 +117,13 @@
         <a href="#about">O nás</a><a href="#services">Naše služby</a><a href="#gallery">Detail techniky</a><a href="#contact">Kontakt</a>
       </nav>
       <div class="footer__enquiry">
-        <a class="footer__contact" href="#contact">Odoslať nezáväzný dopyt <span aria-hidden="true">↗</span></a>
+        <a class="footer__contact" href="#contact">Odoslať nezáväzný dopyt <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" focusable="false"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         {% if contacts.email %}<a class="footer__direct" href="{{ contacts.email.href }}">{{ contacts.email.value }}</a>{% endif %}
         {% if contacts.phone %}<a class="footer__direct" href="{{ contacts.phone.href }}">{{ contacts.phone.value }}</a>{% endif %}
         {% if contacts.instagram %}<a class="footer__direct" href="{{ contacts.instagram.href }}" target="_blank" rel="noopener">Instagram ↗</a>{% endif %}
       </div>
     </div>
-    <div class="container footer__meta"><p>© {% now 'Y' %} Spiritus Venti</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true">↑</span></a></div>
+    <div class="container footer__meta"><p>© {% now 'Y' %} Spiritus Venti</p><a class="footer__back" href="#home">Späť hore <span aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
   </footer>
   <dialog class="lightbox" id="lightbox" aria-labelledby="lightboxCaption"><button class="lightbox__close" id="lightboxClose" aria-label="Zavrieť fotografiu">×</button><div class="lightbox__frame" id="lightboxFrame"></div><p id="lightboxCaption"></p></dialog>
 </body>
